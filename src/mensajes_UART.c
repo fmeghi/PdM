@@ -42,7 +42,7 @@ void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma){
 	delayInit(&delayEntrada, 10000);
 	uartRxFlush(UART_USB);
 	uartWriteString( UART_USB, "Ingrese un valor limite para generar una alerta\r\n" );
-	uartWriteString( UART_USB, "Dentro de los proximos 10 segundos.\r\n" );
+	uartWriteString( UART_USB, "dentro de los proximos 10 segundos.\r\n" );
 	while(!delayRead(&delayEntrada)){
 		if(dataEnUART()){
 			scanf("%d", &nuevaAlerta);
@@ -50,12 +50,15 @@ void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma){
 		}
 	}
 	if (0xFFFF == nuevaAlerta){
-		uartWriteString( UART_USB, "TIME OUT! Ingrese una tecla para intentarlo nuevamente.\r\n" );
+		uartWriteString( UART_USB, "TIME OUT! Ingrese un caracter para intentar nuevamente.\r\n" );
 		return;
 	}
 	if (0 < nuevaAlerta && BITS_ADC > nuevaAlerta){
 		*valorAlerta = nuevaAlerta;
 		uartWriteString( UART_USB, "El valor ingresado es correcto.\r\n" );
+	}else{
+		uartWriteString( UART_USB, "El valor es incorrecto. Ingrese un caracter para intentar nuevamente.\r\n" );
+		return;
 	}
 	delayInit(&delayEntrada, 10000);
 	uartRxFlush(UART_USB);
@@ -68,7 +71,7 @@ void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma){
 		}
 	}
 	if (0xFFFF == nuevaAlarma){
-		uartWriteString( UART_USB, "TIME OUT! Ingrese una tecla para intentarlo nuevamente.\r\n" );
+		uartWriteString( UART_USB, "TIME OUT! Ingrese un caracter para intentar nuevamente.\r\n" );
 		return;
 	}
 	if(0 < nuevaAlarma && *valorAlerta > nuevaAlarma){
@@ -77,7 +80,7 @@ void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma){
 		return;
 	}
 	uartWriteString( UART_USB, "Los valores ingresados no son validos.\r\n" );
-	uartWriteString( UART_USB, "Ingrese una tecla para volver a intentarlo.\r\n" );
+	uartWriteString( UART_USB, "Ingrese un caracter para volver a intentarlo.\r\n" );
 	uartRxFlush(UART_USB);
 }
 
