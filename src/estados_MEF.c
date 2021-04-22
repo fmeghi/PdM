@@ -8,6 +8,7 @@
 
 #include "estados_MEF.h"
 #include "sapi.h"
+#include "mensajes_UART.h"
 
 /*=====[Definition macros of private constants]==============================*/
 
@@ -16,12 +17,6 @@
 #define VALOR_ALERTA_ADC_INI VALOR_ALARMA_ADC_INI*2
 
 /*=====[Definitions of private data types]===================================*/
-
-typedef enum{
-	NORMAL,
-	ALERTA,
-	ALARMA,
-}estado_t;
 
 /*=====[Definitions of extern global variables]==============================*/
 
@@ -32,7 +27,7 @@ typedef enum{
 static estado_t estadoMEF;
 static uint16_t valorAlertaADC;
 static uint16_t valorAlarmaADC;
-static uint16_t valorADC;
+//static uint16_t valorADC;
 
 /*=====[Implementation of public functions]==================================*/
 
@@ -41,45 +36,53 @@ void iniciarMEF(void){
 	estadoMEF = NORMAL;
 	valorAlarmaADC = VALOR_ALARMA_ADC_INI;
 	valorAlertaADC = VALOR_ALERTA_ADC_INI;
-	//iniciar uart
+	iniciarUART();
 	adcInit(ADC_ENABLE);
 }
 
 
 void actualizarMEF(void){
+	uint16_t valorADC;
 	valorADC = adcRead(CH1);
+	if (dataEnUART()){
+		recivirConfiguracion(&valorAlertaADC, &valorAlarmaADC);
+	}
 
 	switch (estadoMEF){
 	case NORMAL:
-		//Actualizar salidas
-		gpioWrite(LED1, ON);
+		//Actualiza salidas
+		gpioWrite(LED1, OFF);
 		gpioWrite(LED2, OFF);
-		gpioWrite(LED3, OFF);
+		gpioWrite(LED3, ON);
 		//Actualizar estados
 		if (valorAlertaADC >= valorADC){
 			estadoMEF = ALERTA;
+			enviarMensajeUART(ALERTA);
 		}
 		break;
 	case ALERTA:
-		//Actualizar salidas
+		//Actualiza salidas
+		gpioWrite(LED1, ON);
+		gpioWrite(LED2, OFF);
+		gpioWrite(LED3, OFF);
+		//Actualiza estados
+		if (valorAlertaADC < valorADC){
+			estadoMEF = NORMAL;
+			enviarMensajeUART(NORMAL);
+		}else if (valorAlarmaADC >= valorADC){
+			estadoMEF = ALARMA;
+			enviarMensajeUART(ALARMA);
+		}
+		break;
+	case ALARMA:
+		// Actualizar salidas
 		gpioWrite(LED1, OFF);
 		gpioWrite(LED2, ON);
 		gpioWrite(LED3, OFF);
 		//Actualizar estados
 		if (valorAlertaADC < valorADC){
 			estadoMEF = NORMAL;
-		}else if (valorAlarmaADC >= valorADC){
-			estadoMEF = ALARMA;
-		}
-		break;
-	case ALARMA:
-		// Actualizar salidas
-		gpioWrite(LED1, OFF);
-		gpioWrite(LED2, OFF);
-		gpioWrite(LED3, ON);
-		//Actualizar estados
-		if (valorAlertaADC < valorADC){
-			estadoMEF = NORMAL;
+			enviarMensajeUART(NORMAL);
 		}
 		break;
 	default:

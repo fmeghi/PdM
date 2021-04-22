@@ -26,6 +26,12 @@ extern "C" {
 
 /*=====[Definitions of public data types]====================================*/
 
+typedef enum{
+	NORMAL,
+	ALERTA,
+	ALARMA,
+}estado_t;
+
 /*=====[Prototypes (declarations) of public functions]=======================*/
 void iniciarMEF(void);
 void actualizarMEF(void);

@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include "estados_MEF.h"
 
 /*=====[C++ - begin]=========================================================*/
 
@@ -27,6 +28,11 @@ extern "C" {
 /*=====[Definitions of public data types]====================================*/
 
 /*=====[Prototypes (declarations) of public functions]=======================*/
+
+void iniciarUART(void);
+void enviarMensajeUART(estado_t estado);
+uint8_t dataEnUART(void);
+void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma);
 
 /*=====[Prototypes (declarations) of public interrupt functions]=============*/
 
