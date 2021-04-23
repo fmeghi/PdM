@@ -26,6 +26,10 @@ extern "C" {
 
 /*=====[Definitions of public data types]====================================*/
 
+/**
+ * @brief Se enumeraron los estados de la MEF
+ * 
+ */
 typedef enum{
 	NORMAL,
 	ALERTA,
@@ -33,7 +37,17 @@ typedef enum{
 }estado_t;
 
 /*=====[Prototypes (declarations) of public functions]=======================*/
+
+/**
+ * @brief Funcion para inicializar la maquina de estados
+ * 
+ */
 void iniciarMEF(void);
+
+/**
+ * @brief Funcion para actualizar los estados de la MEF
+ * 
+ */
 void actualizarMEF(void);
 
 /*=====[Prototypes (declarations) of public interrupt functions]=============*/

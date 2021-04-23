@@ -24,10 +24,10 @@
 
 /*=====[Definitions of private global variables]=============================*/
 
+
 static estado_t estadoMEF;
 static uint16_t valorAlertaADC;
 static uint16_t valorAlarmaADC;
-//static uint16_t valorADC;
 
 /*=====[Implementation of public functions]==================================*/
 

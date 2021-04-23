@@ -14,6 +14,7 @@ void iniciarUART(void){
 	uartInit( UART_USB, 115200 );
 }
 
+
 void enviarMensajeUART(estado_t estado){
 	switch (estado){
 	case NORMAL:
@@ -31,9 +32,11 @@ void enviarMensajeUART(estado_t estado){
 	}
 }
 
+
 uint8_t dataEnUART(void){
 	return uartRxReady(UART_USB);
 }
+
 
 void recivirConfiguracion(uint16_t *valorAlerta, uint16_t *valorAlarma){
 	delay_t delayEntrada;
